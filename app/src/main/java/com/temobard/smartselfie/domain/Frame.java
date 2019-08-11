@@ -5,6 +5,23 @@ public class Frame {
     private int top;
     private int right;
     private int bottom;
+    private float scale = 1.0F;
+
+    public int getLeft() {
+        return left;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public int getRight() {
+        return right;
+    }
+
+    public int getBottom() {
+        return bottom;
+    }
 
     @Override
     public String toString() {
@@ -18,11 +35,19 @@ public class Frame {
         this.bottom = bottom;
     }
 
-    public Frame translate(Frame frame, float scale) {
-        int tLeft = (int) (left * scale + frame.left);
-        int tRight = (int) (right * scale + frame.left);
-        int tTop = (int) (top * scale + frame.top);
-        int tBottom = (int) (bottom * scale + frame.top);
+    public Frame(int left, int top, int right, int bottom, float scale) {
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+        this.scale = scale;
+    }
+
+    public Frame translate(Frame frame) {
+        int tLeft = (int) (left * frame.scale + frame.left);
+        int tRight = (int) (right * frame.scale + frame.left);
+        int tTop = (int) (top * frame.scale + frame.top);
+        int tBottom = (int) (bottom * frame.scale + frame.top);
 
         return new Frame(tLeft, tTop, tRight, tBottom);
     }

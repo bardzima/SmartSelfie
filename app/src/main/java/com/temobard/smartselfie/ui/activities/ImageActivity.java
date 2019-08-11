@@ -64,6 +64,7 @@ public class ImageActivity extends AppCompatActivity {
         CropImage.activity(Uri.fromFile(new File(imagePath)))
                 .start(this);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

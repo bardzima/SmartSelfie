@@ -2,7 +2,6 @@ package com.temobard.smartselfie.ui.viewmodels;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.graphics.Rect;
 import android.util.Log;
 
 import com.temobard.smartselfie.data.FramedFaceProcessor;
@@ -42,9 +41,8 @@ public class FaceViewModel extends BaseViewModel {
         framedFaceProcessor.setFrame(faceFrame);
     }
 
-    public void setCameraFrame(Rect cameraRect, float scale) {
+    public void setCameraFrame(Frame cameraFrame) {
         Log.d("FaceViewModel", "setCameraFrame");
-        Frame faceFrame = new Frame(cameraRect.left, cameraRect.top, cameraRect.right, cameraRect.bottom);
-        framedFaceProcessor.setCameraFrame(faceFrame, scale);
+        framedFaceProcessor.setCameraFrame(cameraFrame);
     }
 }
