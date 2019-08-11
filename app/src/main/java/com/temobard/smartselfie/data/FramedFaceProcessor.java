@@ -14,7 +14,6 @@ public class FramedFaceProcessor {
 
     private Frame frame;
     private Frame cameraFrame;
-    private float scale;
 
     public FramedFaceProcessor(FaceTracker faceTracker) {
         this.faceTracker = faceTracker;
@@ -24,9 +23,8 @@ public class FramedFaceProcessor {
         this.frame = frame;
     }
 
-    public void setCameraFrame(Frame cameraFrame, float scale) {
+    public void setCameraFrame(Frame cameraFrame) {
         this.cameraFrame = cameraFrame;
-        this.scale = scale;
     }
 
     public Observable<Boolean> getFaceFramed() {
@@ -44,6 +42,6 @@ public class FramedFaceProcessor {
 
     private Frame getTrueFaceFrame(Frame faceFrame) {
         if(cameraFrame == null || faceFrame == null) return null;
-        return faceFrame.translate(cameraFrame, scale);
+        return faceFrame.translate(cameraFrame);
     }
 }

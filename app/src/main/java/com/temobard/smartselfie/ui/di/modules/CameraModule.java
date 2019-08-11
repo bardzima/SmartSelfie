@@ -19,7 +19,7 @@ public class CameraModule {
     @Provides
     CameraSource providesCameraSource(Context context, FaceDetector detector) {
         return new CameraSource.Builder(context, detector)
-                .setFacing(CameraSource.CAMERA_FACING_FRONT)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedFps(30.0f)
                 .build();
     }

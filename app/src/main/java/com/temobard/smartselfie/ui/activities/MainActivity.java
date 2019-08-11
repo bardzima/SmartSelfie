@@ -19,6 +19,8 @@ import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
 
+import static com.temobard.smartselfie.ui.constants.ActivityConstants.IMAGE_PATH_KEY;
+
 public class MainActivity extends AppCompatActivity {
 
     @Inject
@@ -48,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
         permissionManager = new PermissionManager(this);
 
         cameraViewModel.getSelfiePath().observe(this, selfiePath -> {
-            startActivity(new Intent(this, ImageActivity.class));
+            Intent intent = new Intent(this, ImageActivity.class);
+            intent.putExtra(IMAGE_PATH_KEY, selfiePath);
+            startActivity(intent);
         });
     }
 
