@@ -56,7 +56,7 @@ public class CameraSurfaceView extends SurfaceView {
     }
 
     @SuppressLint("MissingPermission")
-    void startIfReady() throws IOException {
+    private void startIfReady() throws IOException {
         if (startRequested && surfaceAvailable) {
             cameraSource.start(getHolder());
             startRequested = false;
