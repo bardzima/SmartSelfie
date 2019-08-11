@@ -1,13 +1,13 @@
 package com.temobard.smartselfie.ui.viewmodels;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.graphics.Rect;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 
-import com.temobard.smartselfie.data.FramedFaceProcessor;
-import com.temobard.smartselfie.domain.Frame;
-
-import java.util.concurrent.TimeUnit;
+import com.google.android.gms.vision.CameraSource;
+import com.temobard.smartselfie.data.sources.CameraController;
+import com.temobard.smartselfie.data.sources.StorageSource;
 
 import javax.inject.Inject;
 
@@ -17,33 +17,66 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CameraViewModel extends BaseViewModel {
 
-    private MutableLiveData<Boolean> faceFramed = new MutableLiveData<>();
-    private FramedFaceProcessor framedFaceProcessor;
+    private MutableLiveData<String> selfiePathSetter = new MutableLiveData<>();
+    private CameraSource cameraSource;
+    private MutableLiveData<Boolean> cameraStarted = new MutableLiveData<>();
+
+    private CameraController cameraController;
+    private StorageSource storageSource;
 
     @Inject
-    CameraViewModel(FramedFaceProcessor framedFaceProcessor) {
-        this.framedFaceProcessor = framedFaceProcessor;
+    public CameraViewModel(
+            CameraController cameraController,
+            CameraSource cameraSource,
+            StorageSource storageSource) {
+        this.cameraController = cameraController;
+        this.storageSource = storageSource;
+        this.cameraSource = cameraSource;
+    }
 
-        Disposable faceTrackerDisposable = framedFaceProcessor.getFaceFramed()
+    public void onSnapPhotoClicked() {
+        Disposable snapDisposable = cameraController.snap()
                 .subscribeOn(Schedulers.io())
-                .throttleLast(200, TimeUnit.MILLISECONDS)
+                //Flip bitmap vertically. Possibly optional later, for now we just assume front camera.
+                .map(bitmap -> {
+                    Matrix matrix = new Matrix();
+                    matrix.postScale(-1, 1, bitmap.getWidth() / 2f, bitmap.getHeight() / 2f);
+                    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                })
+                //save bitmap into file and return file path
+                .map(bitmap -> storageSource.saveImage(bitmap))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(faceInFrame -> faceFramed.setValue(faceInFrame));
+                .subscribe(selfiePath -> selfiePathSetter.setValue(selfiePath));
 
-        compositeDisposable.add(faceTrackerDisposable);
+        compositeDisposable.add(snapDisposable);
     }
 
-    public MutableLiveData<Boolean> getFaceFramed() {
-        return faceFramed;
+    public LiveData<String> getSelfiePath() {
+        return selfiePathSetter;
     }
 
-    public void setFaceFrame(Frame faceFrame) {
-        framedFaceProcessor.setFrame(faceFrame);
+    public CameraSource getCameraSource() {
+        return cameraSource;
     }
 
-    public void setCameraFrame(Rect cameraRect, float scale) {
-        Log.d("CameraViewModel", "setCameraFrame");
-        Frame faceFrame = new Frame(cameraRect.left, cameraRect.top, cameraRect.right, cameraRect.bottom);
-        framedFaceProcessor.setCameraFrame(faceFrame, scale);
+    public MutableLiveData<Boolean> getCameraStarted() {
+        return cameraStarted;
+    }
+
+    public void resumeCamera() {
+        cameraStarted.setValue(true);
+    }
+
+    public void pauseCamera() {
+        cameraStarted.setValue(false);
+        cameraController.stop();
+    }
+
+    @Override
+    protected void onCleared() {
+        if (cameraSource != null) {
+            cameraSource.release();
+        }
+        super.onCleared();
     }
 }

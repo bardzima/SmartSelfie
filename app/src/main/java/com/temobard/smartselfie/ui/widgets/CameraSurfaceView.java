@@ -8,11 +8,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.google.android.gms.vision.CameraSource;
-import com.temobard.smartselfie.ui.interfaces.CameraView;
 
 import java.io.IOException;
 
-public class SelfieCameraView extends SurfaceView implements CameraView {
+public class CameraSurfaceView extends SurfaceView {
 
     private static final String TAG = "CameraView";
 
@@ -30,7 +29,7 @@ public class SelfieCameraView extends SurfaceView implements CameraView {
 
     private OnSurfaceUpdateListener surfaceUpdateListener;
 
-    public SelfieCameraView(Context context, AttributeSet attrs) {
+    public CameraSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         startRequested = false;
@@ -43,31 +42,16 @@ public class SelfieCameraView extends SurfaceView implements CameraView {
         return cameraSource;
     }
 
-    @Override
-    public boolean start(CameraSource cameraSource) {
-        if (cameraSource == null) {
-            stop();
-        }
+    public void start(CameraSource cameraSource) {
+        if (cameraSource == null) return;
 
         this.cameraSource = cameraSource;
 
-        if (this.cameraSource != null) {
-            startRequested = true;
+        startRequested = true;
 
-            try {
-                startIfReady();
-            } catch (IOException e) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    @Override
-    public void stop() {
-        if (cameraSource != null) {
-            cameraSource.stop();
+        try {
+            startIfReady();
+        } catch (IOException ignored) {
         }
     }
 
