@@ -13,12 +13,10 @@ import android.view.MenuItem;
 
 import com.temobard.smartselfie.R;
 import com.temobard.smartselfie.databinding.ActivitySelfieBinding;
-import com.temobard.smartselfie.ui.interfaces.ActivityResultInquirer;
-import com.temobard.smartselfie.ui.managers.SelfieManager;
+import com.temobard.smartselfie.ui.managers.ImageCropManager;
 import com.temobard.smartselfie.ui.viewmodels.CropViewModel;
-import com.temobard.smartselfie.ui.viewmodels.SelfieViewModel;
+import com.temobard.smartselfie.ui.viewmodels.CameraViewModel;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -30,9 +28,7 @@ public class ImageActivity extends AppCompatActivity {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    private SelfieManager selfieManager;
-
-    protected ArrayList<ActivityResultInquirer> inquirers = new ArrayList<>();
+    private ImageCropManager imageCropManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +36,10 @@ public class ImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //get viewmodels
-        SelfieViewModel selfieViewModel = ViewModelProviders.of(this, viewModelFactory).get(SelfieViewModel.class);
         CropViewModel cropViewModel = ViewModelProviders.of(this, viewModelFactory).get(CropViewModel.class);
+
+        String imagePath = ViewModelProviders.of(this, viewModelFactory).get(CameraViewModel.class)
+                .getSelfiePath().getValue();
 
         //initialize databinding
         ActivitySelfieBinding binding =
@@ -51,8 +49,7 @@ public class ImageActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        selfieManager = new SelfieManager(this, selfieViewModel.getSelfiePath().getValue(), cropViewModel);
-        inquirers.add(selfieManager);
+        imageCropManager = new ImageCropManager(this, imagePath, cropViewModel);
     }
 
     @Override
@@ -65,7 +62,7 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) finish();
-        else if (item.getItemId() == R.id.imageCropItem) selfieManager.startCropping();
+        else if (item.getItemId() == R.id.imageCropItem) imageCropManager.startCropping();
 
         return super.onOptionsItemSelected(item);
     }
@@ -73,9 +70,6 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        for (ActivityResultInquirer inquirer : inquirers) {
-            inquirer.onActivityResult(requestCode, resultCode, data);
-        }
+        imageCropManager.onActivityResult(requestCode, resultCode, data);
     }
 }

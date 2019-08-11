@@ -9,12 +9,12 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.common.images.Size;
 import com.google.android.gms.vision.CameraSource;
-import com.temobard.smartselfie.ui.interfaces.CameraView;
 
-public class CameraContainerView extends ViewGroup implements CameraView {
+public class CameraView extends ViewGroup {
 
     private static final String TAG = "CameraContainerView";
-    private SelfieCameraView cameraView;
+    private CameraSurfaceView cameraView;
+    private CameraSource cameraSource;
 
     private Rect cameraFrame = new Rect();
     private Rect layoutRect = new Rect();
@@ -29,10 +29,10 @@ public class CameraContainerView extends ViewGroup implements CameraView {
         this.cameraSizeUpdateListener = cameraSizeUpdateListener;
     }
 
-    public CameraContainerView(Context context, AttributeSet attrs) {
+    public CameraView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        cameraView = new SelfieCameraView(context, attrs);
+        cameraView = new CameraSurfaceView(context, attrs);
         addView(cameraView);
 
         cameraView.setSurfaceUpdateListener(() -> {
@@ -50,14 +50,12 @@ public class CameraContainerView extends ViewGroup implements CameraView {
         calculateSize(cameraView.getCameraSource());
     }
 
-    @Override
-    public boolean start(CameraSource cameraSource) {
-        return cameraView.start(cameraSource);
+    public void setCameraSource(CameraSource cameraSource) {
+        this.cameraSource = cameraSource;
     }
 
-    @Override
-    public void stop() {
-        cameraView.stop();
+    public void setCameraStarted(Boolean started) {
+        if(started != null && started) cameraView.start(cameraSource);
     }
 
     private void calculateSize(CameraSource cameraSource) {

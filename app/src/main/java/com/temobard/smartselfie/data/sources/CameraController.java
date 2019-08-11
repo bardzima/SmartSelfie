@@ -5,5 +5,7 @@ import android.graphics.Bitmap;
 import io.reactivex.Single;
 
 public interface CameraController {
+    void start();
+    void stop();
     Single<Bitmap> snap();
 }

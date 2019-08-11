@@ -17,6 +17,16 @@ public class SelfieCameraController implements CameraController {
     }
 
     @Override
+    public void start() {
+        // Do nothing here. CameraSource needs a SurfaceHolder to reflect the image.
+    }
+
+    @Override
+    public void stop() {
+        cameraSource.stop();
+    }
+
+    @Override
     public Single<Bitmap> snap() {
         return Single.create(emitter -> cameraSource.takePicture(null, bytes -> {
             emitter.onSuccess(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));

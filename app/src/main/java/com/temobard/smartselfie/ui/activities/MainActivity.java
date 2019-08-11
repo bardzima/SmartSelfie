@@ -7,66 +7,66 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
-import com.google.android.gms.vision.CameraSource;
 import com.temobard.smartselfie.R;
 import com.temobard.smartselfie.databinding.ActivityMainBinding;
-import com.temobard.smartselfie.ui.interfaces.PermissionInquirer;
-import com.temobard.smartselfie.ui.managers.CameraManager;
+import com.temobard.smartselfie.ui.managers.PermissionManager;
 import com.temobard.smartselfie.ui.viewmodels.CameraViewModel;
-import com.temobard.smartselfie.ui.viewmodels.SelfieViewModel;
-import com.temobard.smartselfie.ui.widgets.CameraContainerView;
-
-import java.util.ArrayList;
+import com.temobard.smartselfie.ui.viewmodels.FaceViewModel;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-
-import static com.temobard.smartselfie.ui.constants.ActivityConstants.IMAGE_PATH_KEY;
 
 public class MainActivity extends AppCompatActivity {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    @Inject
-    CameraSource cameraSource;
-
-    protected ArrayList<PermissionInquirer> inquirers = new ArrayList<>();
+    private CameraViewModel cameraViewModel;
+    private PermissionManager permissionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
 
-        CameraViewModel cameraViewModel = ViewModelProviders.of(this, viewModelFactory).get(CameraViewModel.class);
-        SelfieViewModel selfieViewModel = ViewModelProviders.of(this, viewModelFactory).get(SelfieViewModel.class);
+        FaceViewModel faceViewModel = ViewModelProviders.of(this, viewModelFactory).get(FaceViewModel.class);
+        cameraViewModel = ViewModelProviders.of(this, viewModelFactory).get(CameraViewModel.class);
 
         ActivityMainBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.setFaceViewModel(faceViewModel);
         binding.setCameraViewModel(cameraViewModel);
-        binding.setSelfieViewModel(selfieViewModel);
         binding.setLifecycleOwner(this);
 
         Lifecycle lifecycle = getLifecycle();
+        lifecycle.addObserver(faceViewModel);
         lifecycle.addObserver(cameraViewModel);
-        lifecycle.addObserver(selfieViewModel);
 
-        CameraContainerView cameraView = findViewById(R.id.cameraView);
-        inquirers.add(new CameraManager(this, cameraSource, cameraView, lifecycle));
+        permissionManager = new PermissionManager(this);
 
-        selfieViewModel.getSelfiePath().observe(this, selfiePath -> {
-            Bundle bundle = new Bundle();
-            bundle.putString(IMAGE_PATH_KEY, selfiePath);
-            startActivity(new Intent(this, ImageActivity.class), bundle);
+        cameraViewModel.getSelfiePath().observe(this, selfiePath -> {
+            startActivity(new Intent(this, ImageActivity.class));
         });
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        for (PermissionInquirer inquirer : inquirers) {
-            inquirer.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+        if(!permissionManager.onRequestPermissionsResult(requestCode, grantResults))
+            Toast.makeText(this, "Camera permission required", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (permissionManager.isPermissionGranted()) cameraViewModel.resumeCamera();
+    }
+
+    @Override
+    protected void onPause() {
+        cameraViewModel.pauseCamera();
+        super.onPause();
     }
 }

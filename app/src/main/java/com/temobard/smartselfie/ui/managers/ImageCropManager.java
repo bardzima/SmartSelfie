@@ -5,19 +5,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
-import com.temobard.smartselfie.ui.interfaces.ActivityResultInquirer;
 import com.temobard.smartselfie.ui.viewmodels.CropViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 
-public class SelfieManager implements ActivityResultInquirer {
+public class ImageCropManager {
 
     private Uri selfieUri;
     private Activity activity;
     private CropViewModel cropViewModel;
 
-    public SelfieManager(Activity activity, String selfiePath, CropViewModel cropViewModel) {
+    public ImageCropManager(Activity activity, String selfiePath, CropViewModel cropViewModel) {
         selfieUri = Uri.fromFile(new File(selfiePath));
         this.activity = activity;
         this.cropViewModel = cropViewModel;
@@ -31,7 +30,6 @@ public class SelfieManager implements ActivityResultInquirer {
                 .start(activity);
     }
 
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);

@@ -1,8 +1,5 @@
 package com.temobard.smartselfie.ui.viewmodels;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-
 import javax.inject.Inject;
 
 public class CropViewModel extends BaseViewModel {
@@ -11,13 +8,13 @@ public class CropViewModel extends BaseViewModel {
     public CropViewModel() {
     }
 
-    private MutableLiveData<String> selfiePathSetter = new MutableLiveData<>();
+    private String selfiePathSetter;
 
-    public LiveData<String> getSelfiePath() {
+    public String getSelfiePath() {
         return selfiePathSetter;
     }
 
     public void setSelfiePath(String path) {
-        selfiePathSetter.setValue(path);
+        selfiePathSetter = path;
     }
 }
