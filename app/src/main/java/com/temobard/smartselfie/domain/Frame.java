@@ -5,7 +5,6 @@ public class Frame {
     int top = 0;
     int right = 0;
     int bottom = 0;
-//    private float scale = 1.0F;
 
     public int getLeft() {
         return left;
@@ -39,7 +38,6 @@ public class Frame {
         this.bottom = bottom;
     }
 
-
     @Override
     public String toString() {
         return "left=" + left + ", top=" + top + ", right=" + right + ", bottom=" + bottom;
@@ -55,23 +53,6 @@ public class Frame {
         this.right = right;
         this.bottom = bottom;
     }
-
-/*    public Frame(int left, int top, int right, int bottom, float scale) {
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-        this.scale = scale;
-    }*/
-
-/*    public Frame scale(Frame frame) {
-        int tLeft = (int) (left * frame.scale + frame.left);
-        int tRight = (int) (right * frame.scale + frame.left);
-        int tTop = (int) (top * frame.scale + frame.top);
-        int tBottom = (int) (bottom * frame.scale + frame.top);
-
-        return new Frame(tLeft, tTop, tRight, tBottom);
-    }*/
 
     public boolean isInsideFrame(Frame frame, float tolerance) {
         if (frame == null) return false;
