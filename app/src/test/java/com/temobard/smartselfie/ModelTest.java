@@ -2,10 +2,10 @@ package com.temobard.smartselfie;
 
 import com.google.android.gms.common.images.Size;
 import com.temobard.smartselfie.data.FramedFaceProcessor;
-import com.temobard.smartselfie.data.sources.FaceTracker;
+import com.temobard.smartselfie.data.sources.FaceDetector;
 import com.temobard.smartselfie.domain.CameraFrame;
 import com.temobard.smartselfie.domain.Frame;
-import com.temobard.smartselfie.model.MockFaceTracker;
+import com.temobard.smartselfie.model.MockFaceDetector;
 import com.temobard.smartselfie.ui.helpers.CameraHelper;
 
 import org.junit.Test;
@@ -15,9 +15,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * Unit tests for face detection model
  */
 public class ModelTest {
 
@@ -39,10 +37,10 @@ public class ModelTest {
     public void test_FaceFramedProcessor() {
 
         //set initial face location
-        MockFaceTracker.faceFrame = new Frame(100, 100, 220, 230);
+        MockFaceDetector.faceFrame = new Frame(100, 100, 220, 230);
 
-        FaceTracker faceTracker = new MockFaceTracker();
-        FramedFaceProcessor faceProcessor = new FramedFaceProcessor(faceTracker);
+        FaceDetector faceDetector = new MockFaceDetector();
+        FramedFaceProcessor faceProcessor = new FramedFaceProcessor(faceDetector);
 
         //set face frame and camera frames
         faceProcessor.setFrame(new Frame(50, 50, 500, 500));
@@ -54,7 +52,7 @@ public class ModelTest {
         assertTrue(faceFramed);
 
         //now move the face outside the frame
-        MockFaceTracker.faceFrame = new Frame(0, 0, 100, 100);
+        MockFaceDetector.faceFrame = new Frame(0, 0, 100, 100);
 
         faceFramed = faceProcessor.getFaceFramed().blockingFirst();
 

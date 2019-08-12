@@ -8,6 +8,10 @@ import com.temobard.smartselfie.data.sources.CameraController;
 
 import io.reactivex.Single;
 
+/**
+ * Android's camera controller class
+ * Starts, stops, snaps, and disposes of camera source
+ */
 public class SelfieCameraController implements CameraController {
 
     private CameraSource cameraSource;
@@ -23,7 +27,16 @@ public class SelfieCameraController implements CameraController {
 
     @Override
     public void stop() {
-        cameraSource.stop();
+        if (cameraSource != null) {
+            cameraSource.stop();
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (cameraSource != null) {
+            cameraSource.release();
+        }
     }
 
     @Override

@@ -2,10 +2,9 @@ package com.temobard.smartselfie.di.modules;
 
 import android.content.Context;
 
-import com.google.android.gms.vision.face.FaceDetector;
 import com.temobard.smartselfie.data.FramedFaceProcessor;
-import com.temobard.smartselfie.data.sources.FaceTracker;
-import com.temobard.smartselfie.framework.MockFaceTracker;
+import com.temobard.smartselfie.data.sources.FaceDetector;
+import com.temobard.smartselfie.framework.MockFaceDetector;
 
 import javax.inject.Singleton;
 
@@ -17,12 +16,12 @@ public class MockDetectorModule {
 
     @Singleton
     @Provides
-    FaceDetector provideDetector(Context context) {
-        FaceDetector detector = new FaceDetector.Builder(context)
+    com.google.android.gms.vision.face.FaceDetector provideDetector(Context context) {
+        com.google.android.gms.vision.face.FaceDetector detector = new com.google.android.gms.vision.face.FaceDetector.Builder(context)
                 .setTrackingEnabled(false)
-                .setLandmarkType(FaceDetector.ALL_LANDMARKS)
-                .setMode(FaceDetector.FAST_MODE)
-                .setClassificationType(FaceDetector.ALL_CLASSIFICATIONS)
+                .setLandmarkType(com.google.android.gms.vision.face.FaceDetector.ALL_LANDMARKS)
+                .setMode(com.google.android.gms.vision.face.FaceDetector.FAST_MODE)
+                .setClassificationType(com.google.android.gms.vision.face.FaceDetector.ALL_CLASSIFICATIONS)
                 .build();
 
         return detector;
@@ -30,13 +29,13 @@ public class MockDetectorModule {
 
     @Singleton
     @Provides
-    FaceTracker providesFaceTracker() {
-        return new MockFaceTracker();
+    FaceDetector providesFaceTracker() {
+        return new MockFaceDetector();
     }
 
     @Singleton
     @Provides
-    FramedFaceProcessor providesFramedFaceProcessor(FaceTracker tracker) {
+    FramedFaceProcessor providesFramedFaceProcessor(FaceDetector tracker) {
         return new FramedFaceProcessor(tracker);
     }
 }

@@ -4,6 +4,9 @@ import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 
+/**
+ * Android's camera source face tracker
+ */
 class CameraFaceTracker extends Tracker<Face> {
 
     interface OnCameraFaceTrackerListener {

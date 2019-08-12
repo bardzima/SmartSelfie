@@ -4,7 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.temobard.smartselfie.R;
 import com.temobard.smartselfie.domain.Frame;
-import com.temobard.smartselfie.framework.MockFaceTracker;
+import com.temobard.smartselfie.framework.MockFaceDetector;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,14 +22,14 @@ public class FaceDetectionTest extends TestBase {
     public void snapCameraDisabledEnabled() {
 
         //"No face"
-        MockFaceTracker.setFaceFrame(null);
+        MockFaceDetector.setFaceFrame(null);
         delay(500);
 
         //button should be disabled when there's no face detected
         onView(withId(R.id.snapButton)).check(matches(not(isEnabled())));
 
         //face shows up within the frame
-        MockFaceTracker.setFaceFrame(new Frame(200, 200, 420, 430));
+        MockFaceDetector.setFaceFrame(new Frame(200, 200, 420, 430));
 
         delay(1000);
 
@@ -37,7 +37,7 @@ public class FaceDetectionTest extends TestBase {
         onView(withId(R.id.snapButton)).check(matches(isEnabled()));
 
         //face moves out of the frame
-        MockFaceTracker.setFaceFrame(new Frame(1000, 1000, 2000, 2000));
+        MockFaceDetector.setFaceFrame(new Frame(1000, 1000, 2000, 2000));
 
         delay(1000);
 

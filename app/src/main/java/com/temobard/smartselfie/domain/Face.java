@@ -1,5 +1,8 @@
 package com.temobard.smartselfie.domain;
 
+/**
+ * Face class that contains parameters for a detected face
+ */
 public class Face {
 
     private Frame frame;

@@ -1,5 +1,9 @@
 package com.temobard.smartselfie.domain;
 
+/**
+ * Base frame POJO
+ * Contains four coordinates and a method to determine if another frame is withing its limits
+ */
 public class Frame {
     int left = 0;
     int top = 0;

@@ -16,6 +16,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * Face detection view model
+ */
 public class FaceViewModel extends BaseViewModel {
 
     private MutableLiveData<Boolean> faceFramed = new MutableLiveData<>();
@@ -34,14 +37,25 @@ public class FaceViewModel extends BaseViewModel {
         compositeDisposable.add(faceTrackerDisposable);
     }
 
+    /**
+     * @return LiveData stream of whether the face has been detected
+     */
     public LiveData<Boolean> getFaceFramed() {
         return faceFramed;
     }
 
+    /**
+     * Sets frame within which the face should be placed
+     * @param faceFrame
+     */
     public void setFaceFrame(Frame faceFrame) {
         framedFaceProcessor.setFrame(faceFrame);
     }
 
+    /**
+     * Sets camera frame
+     * @param cameraFrame
+     */
     public void setCameraFrame(CameraFrame cameraFrame) {
         Log.d("FaceViewModel", "setCameraFrame");
         framedFaceProcessor.setCameraFrame(cameraFrame);

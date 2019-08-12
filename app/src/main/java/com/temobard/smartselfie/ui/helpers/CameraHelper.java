@@ -6,6 +6,13 @@ import com.temobard.smartselfie.domain.Frame;
 
 public class CameraHelper {
 
+    /**
+     * Calculates a scale and position of the camera frame in regards with the real screen dimensions
+     * @param cameraSize size of the camera detected
+     * @param viewFrame frame of the view within which the camera is placed
+     * @param portrait portrait/landscape orientation
+     * @return CameraFrame object that contains camera's placement within the screen
+     */
     public static CameraFrame getAdjustedCameraFrame(Size cameraSize, Frame viewFrame, boolean portrait) {
         int width = 320;
         int height = 240;

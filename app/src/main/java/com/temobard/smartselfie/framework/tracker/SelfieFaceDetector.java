@@ -1,10 +1,7 @@
 package com.temobard.smartselfie.framework.tracker;
 
-import android.util.Log;
-
 import com.google.android.gms.vision.MultiProcessor;
-import com.google.android.gms.vision.face.FaceDetector;
-import com.temobard.smartselfie.data.sources.FaceTracker;
+import com.temobard.smartselfie.data.sources.FaceDetector;
 import com.temobard.smartselfie.domain.Face;
 import com.temobard.smartselfie.domain.Frame;
 
@@ -12,25 +9,29 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
+/**
+ * Face detector class
+ */
+public class SelfieFaceDetector implements FaceDetector {
 
-public class SelfieFaceTracker implements FaceTracker {
+    private static final String TAG = "SelfieFaceDetector";
 
-    private static final String TAG = "SelfieFaceTracker";
-
-    private FaceDetector detector;
+    private com.google.android.gms.vision.face.FaceDetector detector;
 
     @Inject
-    public SelfieFaceTracker(FaceDetector detector) {
+    public SelfieFaceDetector(com.google.android.gms.vision.face.FaceDetector detector) {
         this.detector = detector;
     }
 
+    /**
+     * @return Face observable with a frame when detected or null frame when not
+     */
     public Observable<com.temobard.smartselfie.domain.Face> getFace() {
         return Observable.create(emitter -> detector.setProcessor(new MultiProcessor.Builder<>(
                 new SelfieFaceTrackerFactory(new CameraFaceTracker.OnCameraFaceTrackerListener() {
                     @Override
                     public void onFaceUpdated(com.google.android.gms.vision.face.Face face) {
-                        Face face_domain = new Face(getFaceFrame(face), face.getEulerY(), face.getEulerZ());
-                        emitter.onNext(face_domain);
+                        emitter.onNext(convertToDomainFace(face));
                     }
 
                     @Override
@@ -41,18 +42,11 @@ public class SelfieFaceTracker implements FaceTracker {
                 .build()));
     }
 
-    private Frame getFaceFrame(com.google.android.gms.vision.face.Face face) {
-
-        Log.d(TAG, "EulerY = " + face.getEulerY());
-        Log.d(TAG, "EulerZ = " + face.getEulerZ());
-        Log.d(TAG, "Position = " + face.getPosition());
-
-
+    private Face convertToDomainFace(com.google.android.gms.vision.face.Face face) {
         int left = (int) face.getPosition().x;
         int top = (int) face.getPosition().y;
         int right = (int) (left + face.getWidth());
         int bottom = (int) (top + face.getHeight());
-
-        return new Frame(left, top, right, bottom);
+        return new Face(new Frame(left, top, right, bottom), face.getEulerY(), face.getEulerZ());
     }
 }

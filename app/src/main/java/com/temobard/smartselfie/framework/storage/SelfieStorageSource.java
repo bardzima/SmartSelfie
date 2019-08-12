@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Image storage class
+ */
 public class SelfieStorageSource implements StorageSource {
 
     private static final String IMAGE_PREFIX = "selfie_";

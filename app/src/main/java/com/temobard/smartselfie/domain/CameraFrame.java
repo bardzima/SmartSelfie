@@ -1,5 +1,8 @@
 package com.temobard.smartselfie.domain;
 
+/**
+ * Camera frame data class. Extends base frame class with scale object.
+ */
 public class CameraFrame extends Frame {
 
     private float scale;

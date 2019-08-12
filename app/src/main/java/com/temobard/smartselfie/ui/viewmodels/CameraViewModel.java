@@ -3,7 +3,6 @@ package com.temobard.smartselfie.ui.viewmodels;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 import com.google.android.gms.vision.CameraSource;
@@ -14,9 +13,11 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * Camera view model class that receives actions related to the camera
+ */
 public class CameraViewModel extends BaseViewModel {
 
     private MutableLiveData<String> selfiePathSetter = new MutableLiveData<>();
@@ -36,6 +37,9 @@ public class CameraViewModel extends BaseViewModel {
         this.cameraSource = cameraSource;
     }
 
+    /**
+     * Receives the request to take a photo
+     */
     public void onSnapPhotoClicked() {
         Disposable snapDisposable = cameraController.snap()
                 .subscribeOn(Schedulers.io())
@@ -53,6 +57,10 @@ public class CameraViewModel extends BaseViewModel {
         compositeDisposable.add(snapDisposable);
     }
 
+    /**
+     * Selfie path getter
+     * @return LiveData stream of the taken selfie image path
+     */
     public LiveData<String> getSelfiePath() {
         return selfiePathSetter;
     }
@@ -61,6 +69,9 @@ public class CameraViewModel extends BaseViewModel {
         return cameraSource;
     }
 
+    /**
+     * @return reflects if the camera start request is sent
+     */
     public MutableLiveData<Boolean> getCameraStarted() {
         return cameraStarted;
     }
@@ -76,9 +87,7 @@ public class CameraViewModel extends BaseViewModel {
 
     @Override
     protected void onCleared() {
-        if (cameraSource != null) {
-            cameraSource.release();
-        }
+        cameraController.dispose();
         super.onCleared();
     }
 }

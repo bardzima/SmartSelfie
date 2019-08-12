@@ -9,7 +9,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "com.temobard.smartselfie.TestRunner"
     }
     buildTypes {
@@ -47,12 +46,12 @@ dependencies {
     implementation "android.arch.lifecycle:reactivestreams:$arch_version"
     implementation "android.arch.lifecycle:common-java8:$arch_version"
 
+    //Tests
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
-    testImplementation 'org.mockito:mockito-inline:2.11.0'
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"

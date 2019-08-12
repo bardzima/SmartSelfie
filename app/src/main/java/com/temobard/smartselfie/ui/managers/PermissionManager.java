@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 
+/**
+ * An extension to an activity class that deals with camera permissions
+ */
 public class PermissionManager {
 
     private static final String TAG = "PermissionManager";
