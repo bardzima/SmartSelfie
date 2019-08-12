@@ -1,8 +1,10 @@
-package com.temobard.smartselfie.ui;
+package com.temobard.smartselfie;
 
 import android.app.Activity;
 
-import com.temobard.smartselfie.ui.di.components.DaggerAppComponent;
+//import com.temobard.smartselfie.di.DaggerMockAppComponent;
+
+import com.temobard.smartselfie.di.DaggerMockAppComponent;
 
 import javax.inject.Inject;
 
@@ -11,7 +13,7 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 import dagger.android.support.DaggerApplication;
 
-public class App extends DaggerApplication implements HasActivityInjector {
+public class TestApp extends DaggerApplication implements HasActivityInjector {
 
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
@@ -20,10 +22,7 @@ public class App extends DaggerApplication implements HasActivityInjector {
 
     @Override
     public void onCreate() {
-        injector = DaggerAppComponent
-                .builder()
-                .application(this)
-                .build();
+        injector = DaggerMockAppComponent.builder().application(this).build();
         super.onCreate();
     }
 

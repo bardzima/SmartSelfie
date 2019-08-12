@@ -1,7 +1,11 @@
-package com.temobard.smartselfie.ui.di.components;
+package com.temobard.smartselfie.di;
 
 import android.app.Application;
 
+import com.temobard.smartselfie.TestApp;
+import com.temobard.smartselfie.di.modules.MockCameraSource;
+import com.temobard.smartselfie.di.modules.MockDetectorModule;
+import com.temobard.smartselfie.tests.FaceDetectionTest;
 import com.temobard.smartselfie.ui.App;
 import com.temobard.smartselfie.ui.di.modules.ActivityModule;
 import com.temobard.smartselfie.ui.di.modules.CameraModule;
@@ -23,18 +27,18 @@ import dagger.android.support.AndroidSupportInjectionModule;
         ActivityModule.class,
         ViewModelModule.class,
         ContextModule.class,
-        CameraModule.class,
+        MockCameraSource.class,
         StorageModule.class,
-        DetectorModule.class
+        MockDetectorModule.class
 })
-public interface AppComponent extends AndroidInjector<App> {
+public interface MockAppComponent extends AndroidInjector<TestApp> {
 
-//    void inject(Application application);
+    void inject(FaceDetectionTest faceDetectionTest);
 
     @Component.Builder
-    interface Builder {
+    interface MockBuilder {
         @BindsInstance
-        Builder application(Application application);
-        AppComponent build();
+        MockBuilder application(Application application);
+        MockAppComponent build();
     }
 }

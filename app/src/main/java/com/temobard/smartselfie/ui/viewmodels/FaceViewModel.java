@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
 import com.temobard.smartselfie.data.FramedFaceProcessor;
+import com.temobard.smartselfie.domain.CameraFrame;
 import com.temobard.smartselfie.domain.Frame;
 
 import java.util.concurrent.TimeUnit;
@@ -21,7 +22,7 @@ public class FaceViewModel extends BaseViewModel {
     private FramedFaceProcessor framedFaceProcessor;
 
     @Inject
-    FaceViewModel(FramedFaceProcessor framedFaceProcessor) {
+    public FaceViewModel(FramedFaceProcessor framedFaceProcessor) {
         this.framedFaceProcessor = framedFaceProcessor;
 
         Disposable faceTrackerDisposable = framedFaceProcessor.getFaceFramed()
@@ -41,7 +42,7 @@ public class FaceViewModel extends BaseViewModel {
         framedFaceProcessor.setFrame(faceFrame);
     }
 
-    public void setCameraFrame(Frame cameraFrame) {
+    public void setCameraFrame(CameraFrame cameraFrame) {
         Log.d("FaceViewModel", "setCameraFrame");
         framedFaceProcessor.setCameraFrame(cameraFrame);
     }

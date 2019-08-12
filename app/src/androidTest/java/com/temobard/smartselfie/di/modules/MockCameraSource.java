@@ -1,4 +1,4 @@
-package com.temobard.smartselfie.ui.di.modules;
+package com.temobard.smartselfie.di.modules;
 
 import android.content.Context;
 
@@ -13,7 +13,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class CameraModule {
+public class MockCameraSource {
 
     @Singleton
     @Provides

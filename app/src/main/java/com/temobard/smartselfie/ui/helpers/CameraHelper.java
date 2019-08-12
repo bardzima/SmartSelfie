@@ -1,12 +1,12 @@
 package com.temobard.smartselfie.ui.helpers;
 
-import android.graphics.Rect;
 import com.google.android.gms.common.images.Size;
+import com.temobard.smartselfie.domain.CameraFrame;
 import com.temobard.smartselfie.domain.Frame;
 
 public class CameraHelper {
 
-    public static Frame getAdjustedCameraFrame(Size cameraSize, Rect viewFrame, boolean portrait) {
+    public static CameraFrame getAdjustedCameraFrame(Size cameraSize, Frame viewFrame, boolean portrait) {
         int width = 320;
         int height = 240;
 
@@ -22,26 +22,26 @@ public class CameraHelper {
             height = tmp;
         }
 
-        final int layoutWidth = viewFrame.right - viewFrame.left;
-        final int layoutHeight = viewFrame.bottom - viewFrame.top;
+        final int viewWidth = viewFrame.getRight() - viewFrame.getLeft();
+        final int viewHeight = viewFrame.getBottom() - viewFrame.getTop();
 
         // Fill the screen
         int camWidth, camHeight, camX, camY;
         float scale;
         if (portrait) {
-            scale = ((float) layoutHeight / (float) height);
+            scale = ((float) viewHeight / (float) height);
             camWidth = (int) (scale * width);
-            camHeight = layoutHeight;
+            camHeight = viewHeight;
             camY = 0;
-            camX = (layoutWidth - camWidth) / 2;
+            camX = (viewWidth - camWidth) / 2;
         } else {
-            scale = (float) layoutWidth / (float) width;
-            camWidth = layoutWidth;
+            scale = (float) viewWidth / (float) width;
+            camWidth = viewWidth;
             camHeight = (int) (scale * height);
             camX = 0;
-            camY = (layoutHeight - camHeight) / 2;
+            camY = (viewHeight - camHeight) / 2;
         }
 
-        return new Frame(camX, camY, camX + camWidth, camY + camHeight, scale);
+        return new CameraFrame(camX, camY, camX + camWidth, camY + camHeight, scale);
     }
 }

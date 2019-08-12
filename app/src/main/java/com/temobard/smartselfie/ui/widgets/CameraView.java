@@ -2,12 +2,12 @@ package com.temobard.smartselfie.ui.widgets;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 import com.google.android.gms.common.images.Size;
 import com.google.android.gms.vision.CameraSource;
+import com.temobard.smartselfie.domain.CameraFrame;
 import com.temobard.smartselfie.domain.Frame;
 import com.temobard.smartselfie.ui.helpers.CameraHelper;
 
@@ -17,12 +17,12 @@ public class CameraView extends ViewGroup {
     private CameraSurfaceView cameraSurfaceView;
     private CameraSource cameraSource;
 
-    private Rect layoutRect = new Rect();
+    private Frame layoutFrame = new Frame(0, 0, 0, 0);
 
     private OnCameraSizeUpdateListener cameraSizeUpdateListener;
 
     public interface OnCameraSizeUpdateListener {
-        void onCameraSizeUpdated(Frame frame);
+        void onCameraSizeUpdated(CameraFrame frame);
     }
 
     public void setOnCameraSizeUpdateListener(OnCameraSizeUpdateListener cameraSizeUpdateListener) {
@@ -42,10 +42,10 @@ public class CameraView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        layoutRect.left = left;
-        layoutRect.right = right;
-        layoutRect.top = top;
-        layoutRect.bottom = bottom;
+        layoutFrame.setLeft(left);
+        layoutFrame.setRight(right);
+        layoutFrame.setTop(top);
+        layoutFrame.setBottom(bottom);
 
         adjustCameraSurfaceViewSize(cameraSurfaceView.getCameraSource());
     }
@@ -60,7 +60,7 @@ public class CameraView extends ViewGroup {
 
     private void adjustCameraSurfaceViewSize(CameraSource cameraSource) {
         Size camSize = (cameraSource == null) ? null : cameraSource.getPreviewSize();
-        Frame camFrame = CameraHelper.getAdjustedCameraFrame(camSize, layoutRect, isPortraitMode());
+        CameraFrame camFrame = CameraHelper.getAdjustedCameraFrame(camSize, layoutFrame, isPortraitMode());
 
         cameraSurfaceView.layout(
                 camFrame.getLeft(),
