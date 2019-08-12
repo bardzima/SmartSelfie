@@ -6,11 +6,8 @@ import com.temobard.smartselfie.TestApp;
 import com.temobard.smartselfie.di.modules.MockCameraSource;
 import com.temobard.smartselfie.di.modules.MockDetectorModule;
 import com.temobard.smartselfie.tests.FaceDetectionTest;
-import com.temobard.smartselfie.ui.App;
 import com.temobard.smartselfie.ui.di.modules.ActivityModule;
-import com.temobard.smartselfie.ui.di.modules.CameraModule;
 import com.temobard.smartselfie.ui.di.modules.ContextModule;
-import com.temobard.smartselfie.ui.di.modules.DetectorModule;
 import com.temobard.smartselfie.ui.di.modules.StorageModule;
 import com.temobard.smartselfie.ui.di.modules.ViewModelModule;
 

@@ -17,14 +17,12 @@ public class MockDetectorModule {
     @Singleton
     @Provides
     com.google.android.gms.vision.face.FaceDetector provideDetector(Context context) {
-        com.google.android.gms.vision.face.FaceDetector detector = new com.google.android.gms.vision.face.FaceDetector.Builder(context)
+        return new com.google.android.gms.vision.face.FaceDetector.Builder(context)
                 .setTrackingEnabled(false)
                 .setLandmarkType(com.google.android.gms.vision.face.FaceDetector.ALL_LANDMARKS)
                 .setMode(com.google.android.gms.vision.face.FaceDetector.FAST_MODE)
                 .setClassificationType(com.google.android.gms.vision.face.FaceDetector.ALL_CLASSIFICATIONS)
                 .build();
-
-        return detector;
     }
 
     @Singleton

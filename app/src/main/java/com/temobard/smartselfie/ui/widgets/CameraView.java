@@ -17,7 +17,7 @@ public class CameraView extends ViewGroup {
     private CameraSurfaceView cameraSurfaceView;
     private CameraSource cameraSource;
 
-    private Frame layoutFrame = new Frame(0, 0, 0, 0);
+    private Frame layoutFrame = new Frame();
 
     private OnCameraSizeUpdateListener cameraSizeUpdateListener;
 
@@ -42,10 +42,11 @@ public class CameraView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        layoutFrame.setLeft(left);
-        layoutFrame.setRight(right);
-        layoutFrame.setTop(top);
-        layoutFrame.setBottom(bottom);
+        layoutFrame.setFrame(left, top, right, bottom);
+//        layoutFrame.setLeft(left);
+//        layoutFrame.setRight(right);
+//        layoutFrame.setTop(top);
+//        layoutFrame.setBottom(bottom);
 
         adjustCameraSurfaceViewSize(cameraSurfaceView.getCameraSource());
     }

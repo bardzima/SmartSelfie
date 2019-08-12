@@ -19,6 +19,8 @@ public class FaceFrameView extends View {
     private Paint mOvalPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mOvalNegativePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+    private Frame faceFrame = new Frame();
+
     private OnFaceFrameSetListener faceFrameSetListener;
 
     public interface OnFaceFrameSetListener {
@@ -59,7 +61,8 @@ public class FaceFrameView extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
 
+        faceFrame.setFrame(left, top, right, bottom);
         if (faceFrameSetListener != null)
-            faceFrameSetListener.onFaceFrameSet(new Frame(left, top, right, bottom));
+            faceFrameSetListener.onFaceFrameSet(faceFrame);
     }
 }

@@ -58,6 +58,13 @@ public class Frame {
         this.bottom = bottom;
     }
 
+    public void setFrame(int left, int top, int right, int bottom) {
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+    }
+
     public boolean isInsideFrame(Frame frame, float tolerance) {
         if (frame == null) return false;
         else return this.left >= frame.left * (1 - tolerance) &&
